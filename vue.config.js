@@ -1,7 +1,7 @@
 const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: "/comment_helper/",
+  publicPath: "/comment_helper_yt/",
   configureWebpack: {
     resolve: {
       alias: {
