@@ -89,7 +89,8 @@ const getVideoData = async () => {
       return response.json();
     }).then(res => {
       getComments(res);
-      gtag('event', 'getComment', { detail: res });
+      const video = res.items[0];
+      gtag('event', 'getComment', { channelTitle: video.snippet.channelTitle, title: video.snippet.title, channelID: video.snippet.channelId, videoID: video.id });
     });
   }
 }
