@@ -1,0 +1,19 @@
+<template>
+  <div class="shrink">
+    <div class="ci w-[250px] h-[225px] mb-4 mx-auto">
+      <img class="w-full h-full" src="../../assets/ci.png" alt="">
+    </div>
+
+    <!-- <div class="w-full text-center">
+      <input type="text" class="border pl-2 w-1/2 h-8 align-middle" placeholder="1208"/>
+      <button class="btn-free-height btn-blue h-8 align-middle">驗證帳號</button>
+    </div> -->
+    <!-- <a class="text-blue-500" href="https://gg90052.github.io/comment_helper/policy.html" target="_blank">Privacy Policy</a> -->
+    <a class="btn btn-sm border-none block w-48 mt-4 mx-auto bg-red-600 text-white" target="_blank" href="https://www.youtube.com/channel/UCNLxbtdTe-fFl8uDUS6tMcw?sub_confirmation=1">訂閱我的 Youtube 頻道</a>
+    <a href="https://www.facebook.com/commenthelper" class="block text-center mt-4 hover:underline hover:underline-offset-2 text-blue-500">如有任何問題<br />請至粉絲團私訊給管理員詢問</a>
+  </div>
+</template>
+
+<script setup lang="ts">
+
+</script>
