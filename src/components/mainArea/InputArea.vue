@@ -76,19 +76,20 @@ const decodeUrl = (url) => {
 }
 
 const getVideoData = async () => {
-  emit('showLoading');
-  rawData = [];
   if (YT_url.value === '') {
     alert('請輸入網址');
   } else if (YT_ID.value === DEFAULT_ID){
     alert('非認可的網址格式');
   } else {
+    emit('showLoading');
+    rawData = [];
     fetch(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2CliveStreamingDetails&id=${YT_ID.value}&key=${YOUTUBE_API_KEY}`
     ).then(response => {
       return response.json();
     }).then(res => {
       getComments(res);
+      gtag('event', 'getComment', { detail: res });
     });
   }
 }
