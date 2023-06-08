@@ -1,8 +1,8 @@
 <template>
   <div class="loading-modal" v-if="show">
     <div class="loading-modal__content">
-      <p class="font-bold ml-52 mt-24 text-2xl">已擷取 {{ dataStore.commentCount }} 筆留言</p>
-      <div class="sk-folding-cube">
+      <p class="font-bold ml-52 mt-24 text-2xl mobile:text-lg mobile:ml-40 mobile:mt-28">已擷取 {{ dataStore.commentCount }} 筆留言</p>
+      <div class="sk-folding-cube mobile:left-60">
         <div class="sk-cube1 sk-cube"></div>
         <div class="sk-cube2 sk-cube"></div>
         <div class="sk-cube4 sk-cube"></div>
@@ -31,9 +31,11 @@ const props = defineProps({
   top: 50%;
   left: 50%;
   transform: translate(-50%, -80%);
-  width: 540px;
+  width: 95%;
+  max-width: 540px;
   height: 350px;
-  background: url('@/assets/progress.jpg') center center no-repeat
+  background: url('@/assets/progress.jpg') center center no-repeat;
+  background-size: contain;
 }
 
 

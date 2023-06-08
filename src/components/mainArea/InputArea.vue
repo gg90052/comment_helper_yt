@@ -1,7 +1,7 @@
 <template>
-  <div class="flex text-left items-center">
-      <Ci />
-      <div class="flex-shrink-0 mt-4 whitespace-nowrap ml-8 max-w-[560px] w-full items-stretch">
+  <div class="flex flex-wrap text-left items-center">
+      <Ci class="mobile:w-full mobile:flex-shrink-0" />
+      <div class="flex-shrink-0 mt-4 whitespace-nowrap ml-8 max-w-[560px] w-full items-stretch mobile:ml-0 mobile:max-w-[362px]">
         <div class="flex w-full">
           <input v-model="YT_url" type="text" class="flex-grow w-full rounded-none input-sm input-bordered border" placeholder="請輸入 Youtube 影片網址"/>
           <button class="btn btn-blue btn-sm flex-shrink-0" @click="getVideoData">抓留言</button>

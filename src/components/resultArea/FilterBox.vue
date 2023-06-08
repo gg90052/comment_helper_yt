@@ -1,29 +1,18 @@
 <template>
   <div class="filterBox bg-white border p-4 mb-2">
-    <div class="grid grid-cols-[300px_1fr_300px]">
+    <p class="text-blue-700 text-3xl w-full text-center mb-4">篩選區塊</p>
+    <div class="grid grid-cols-[300px_1fr_300px] mobile:grid-cols-1">
       <div>
         <div class="form-control">
-          <label class="label justify-start cursor-pointer">
-            <span class="label-text">排除重複留言</span> 
+          <label class="label justify-start cursor-pointer p-0">
+            <span class="label-text text-base">排除重複留言</span> 
             <input @change="filterAll" type="checkbox" v-model="filterState.removeDuplicate" class="toggle toggle-primary ml-4" checked />
           </label>
         </div>
-        <!-- <div class="form-control w-full max-w-xs">
-          <label class="label">
-            <span class="label-text">至少要 @ 多少人</span>
-          </label>
-          <select @change="filterAll" class="select select-bordered select-sm w-8/12" v-model="filterState.hasTag">
-            <option :value="0" selected>0人(不需＠)</option>
-            <option :value="1">1人</option>
-            <option :value="2">2人</option>
-            <option :value="3">3人</option>
-          </select>
-        </div> -->
       </div>
-      <div>
-        <p class="text-blue-700 text-3xl w-full text-center">篩選區塊</p>
-        <div class="w-full flex justify-start items-center mt-10">
-          <p>截止時間：</p>
+      <div class="mobile:my-4">
+        <div class="w-full flex justify-start items-center flex-wrap">
+          <p class="flex-shrink-0 text-left mobile:w-full">截止時間：</p>
           <datepicker @update:modelValue="onChangeDate" inputFormat="yyyy-MM-dd" class="pl-2 border inline-block" v-model="filterState.endDate" />
           <datepicker @update:modelValue="onChangeTime" inputFormat="HH:mm" minimumView="time" startingView="time" class="pl-2 border inline-block" v-model="filterState.endTime" />
         </div>

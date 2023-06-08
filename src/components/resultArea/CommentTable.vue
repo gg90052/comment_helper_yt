@@ -1,22 +1,22 @@
 <template>
-  <table class="resultTable table table-auto whitespace-normal table-zebra w-full">
+  <table class="resultTable table table-auto whitespace-normal table-zebra w-full mobile:table-fixed">
     <!-- head -->
     <thead>
       <tr>
-        <th class="!rounded-t-none">序號</th>
-        <th>名稱</th>
-        <th class="">留言內容</th>
-        <th @click="sort('like_count')" class="cursor-pointer text-center">喜歡</th>
-        <th @click="sort('reply_count')" class="cursor-pointer text-center">回覆</th>
-        <th @click="sort('time')" class="!rounded-t-none cursor-pointer">留言時間</th>
+        <th class="!rounded-t-none w-[3rem] !static">序號</th>
+        <th class="w-[8rem]">名稱</th>
+        <th class="w-[43rem]">留言內容</th>
+        <th @click="sort('like_count')" class="cursor-pointer text-center w-[6rem]">喜歡</th>
+        <th @click="sort('reply_count')" class="cursor-pointer text-center w-[6rem]">回覆</th>
+        <th @click="sort('time')" class="!rounded-t-none cursor-pointer w-[14rem]">留言時間</th>
       </tr>
     </thead>
     <tbody>
       <template v-for="(tr, index) in sortTableData" :key="tr.id">
         <tr>
           <td class="text-center">{{ index + 1 }}</td>
-          <td class="w-[14rem] whitespace-normal break-all"><a :href="tr.author_url" class="text-[#D68927]" target="_blank">{{ tr.name }}</a></td>
-          <td class="w-[43rem] whitespace-normal hover:underline flex flex-nowrap">
+          <td class="whitespace-normal break-all"><a :href="tr.author_url" class="text-[#D68927]" target="_blank">{{ tr.name }}</a></td>
+          <td class="whitespace-normal hover:underline flex flex-nowrap">
             <a class="youtubeicon" :href="messageURL(tr.comment_id)"
               target="_blank"></a>
             <a :href="messageURL(tr.comment_id)" target="_blank" v-html="tr.comment"></a>
@@ -47,15 +47,6 @@ const datas = computed(()=>{
     return props.datas.length > 0 ? props.datas : dataStore.filteredData;
   }
 });
-const username = computed(()=>{
-  return (tr) => {
-    if (dataStore.needPaid === true && dataStore.logged === false){
-      return 'undefined';
-    }else{
-      return tr.from ? tr.from.name : tr.id;
-    }
-  }
-})
 const messageURL = computed(()=>{
   return (id) => {
     return `https://www.youtube.com/watch?v=${dataStore.videoDetail.id}&lc=${id}`;

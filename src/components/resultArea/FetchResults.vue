@@ -13,19 +13,19 @@
         <a class="tab tab-lg tab-lifted" @click="setActiveTab(1)" :class="activeTab === 1 ? 'tab-active':''">得獎名單</a> 
         <a class="tab tab-lg tab-lifted" @click="setActiveTab(2)" :class="activeTab === 2 ? 'tab-active':''">得獎名單(表格)</a> 
       </div>
-      <div v-if="activeTab === 0" class="bg-white text-sm py-1 px-4">
+      <div v-if="activeTab === 0" class="bg-white text-sm py-1 px-4 mobile:w-full">
         <div class="flex items-center">
           <div>
-            <p>共擷取{{dataStore.rawData.length}}筆資料</p>
-            <p>篩選出{{dataStore.filteredData.length}}筆資料</p>
+            <p class="whitespace-nowrap">共擷取{{dataStore.rawData.length}}筆資料</p>
+            <p class="whitespace-nowrap">篩選出{{dataStore.filteredData.length}}筆資料</p>
           </div>
-          <button v-if="dataStore.logged === true || dataStore.needPaid === false" @click="exportTable" class="btn btn-blue btn-sm ml-4">匯出篩選結果</button>
-          <button @click="copyTable" class="btn btn-blue btn-sm ml-4">複製表格內容</button>
+          <button v-if="dataStore.logged === true || dataStore.needPaid === false" @click="exportTable" class="btn btn-blue btn-sm ml-4 mobile:ml-2">匯出篩選結果</button>
+          <button @click="copyTable" class="btn btn-blue btn-sm ml-4 mobile:ml-2">複製表格內容</button>
         </div>
       </div>
-      <div v-if="activeTab === 2" class="bg-white text-sm py-1 px-4">
+      <div v-if="activeTab === 2" class="bg-white text-sm py-1 px-4 mobile:w-full">
         <div class="flex items-center">
-          <button @click="copyTable" class="btn btn-blue btn-sm ml-4">複製表格內容</button>
+          <button @click="copyTable" class="btn btn-blue btn-sm">複製表格內容</button>
         </div>
       </div>
     </div>
