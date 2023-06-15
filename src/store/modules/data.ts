@@ -23,28 +23,11 @@ export const useDataStore = defineStore({
     filterChange: false,
     videoDetail: {},
     commentCount: 0,
+    liveVideo: false,
+    getCommentTime: new Date(),
   }),
   getters: {},
   actions: {
-    init() {
-      this.rawData = [];
-      this.filteredData = [];
-      this.postData = {};
-      this.command = '';
-      this.drawResult = [];
-      this.prizeList = [];
-      this.showPrize = false;
-      this.files = [];
-      this.showFileTable = -1;
-      this.logged = false;
-      this.userFbId = '';
-      this.userFbName = '';
-      this.needPaid = false,
-      this.accessToken = '',
-      this.postType = '';
-      this.videoDetail = {};
-      this.commentCount = 0;
-    },
     setPostData(data){
       this.postData = data;
     },

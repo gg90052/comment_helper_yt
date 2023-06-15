@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import { useDataStore } from '@/store/modules/data';
+import dayjs, { type Dayjs } from 'dayjs';
 import Ci from './Ci.vue';
 import YtVideo from './YtVideo.vue';
 
@@ -24,16 +25,15 @@ interface rawDataType {
   author_url: string,
   author_pic?: string,
   comment: string,
-  comment_original: string,
   comment_id: string,
   like_count: number,
   reply_count: number
-  time: string,
+  time: Dayjs,
 }
 
 
 const dataStore = useDataStore();
-const emit = defineEmits(['fbLogged', 'showLoading']);
+const emit = defineEmits(['fbLogged', 'showLoading', 'update']);
 function openURL(url: string, target?: string) {
   window.open(url, target);
 }
@@ -98,10 +98,14 @@ const getVideoData = async () => {
 const getComments = (video_data) => {
   dataStore.setData(0, 'commentCount');
   dataStore.setData(video_data.items[0], 'videoDetail');
+  const d = new Date();
   if (video_data.items[0].snippet.liveBroadcastContent == 'live') {
-    alert('暫不支援直播影片');
-    return false;
+    // alert('暫不支援直播影片');
+    // return false;
     const liveID = video_data.items[0].liveStreamingDetails.activeLiveChatId;
+    dataStore.setData(true, 'liveVideo');
+    d.setDate(d.getDate()+1);
+    dataStore.setData(d, 'getCommentTime');
     getLive(liveID).then(res=>{
       for (let i of res) {
         let obj: rawDataType = {
@@ -110,21 +114,24 @@ const getComments = (video_data) => {
           author_url: i.authorDetails.channelUrl,
           author_pic: i.authorDetails.profileImageUrl,
           comment: i.snippet.displayMessage,
-          comment_original: i.snippet.textMessageDetails.messageText,
           comment_id: i.id,
           like_count: 0,
           reply_count: 0,
-          time: i.snippet.publishedAt,
+          time: dayjs(i.snippet.publishedAt),
         }
-        rawData.unshift(obj);
+        rawData.push(obj);
       }
-      lastid = rawData[rawData.length - 1].id;
+      lastid = res[res.length - 1].id;
       dataStore.setData(rawData, 'rawData');
       // this.$store.commit('setLoading', false);
       // this.$emit('finish', yt);
-      keepGet(video_data.items[0].liveStreamingDetails.activeLiveChatId);
+      setTimeout(function () {
+        keepGet(liveID);
+      }, 3000);
+      emit('showLoading', false);
     });
   }else{
+    dataStore.setData(d, 'getCommentTime');
     getNormal(YT_ID.value).then(res=>{
       // console.log(res);
       for (let i of res) {
@@ -134,15 +141,13 @@ const getComments = (video_data) => {
           author_url: i.snippet.topLevelComment.snippet.authorChannelUrl,
           author_pic: i.snippet.topLevelComment.snippet.authorProfileImageUrl,
           comment: i.snippet.topLevelComment.snippet.textDisplay,
-          comment_original: i.snippet.topLevelComment.snippet.textOriginal,
           comment_id: i.snippet.topLevelComment.id,
           like_count: i.snippet.topLevelComment.snippet.likeCount,
           reply_count: i.snippet.totalReplyCount,
-          time: i.snippet.topLevelComment.snippet.publishedAt,
+          time: dayjs(i.snippet.topLevelComment.snippet.publishedAt),
         }
         rawData.push(obj);
       }
-      rawData.reverse();
       // console.log(rawData);
       dataStore.setData(rawData, 'rawData');
       emit('showLoading', false);
@@ -210,53 +215,46 @@ const getLive = (id) => {
     })
   });
 }
-// const keepGet = (id) => {
-//   getLive(id).then(res => {
-//     let arr = [];
-//     let counter = res.length - 1;
-//     while (res[counter].id !== lastid || counter <= 0) {
-//       arr.push(res[counter]);
-//       counter--;
-//     }
-//     if (arr.length > 0) {
-//       lastid = arr[0].id;
-//     }
-//     let rawdata = {
-//       data: [],
-//       standard: [],
-//     };
-//     let standard = [];
-//     for (let i of arr) {
-//       let obj: rawDataType = {
-//         id: i.id,
-//         name: i.authorDetails.displayName,
-//         author_url: i.authorDetails.channelUrl,
-//         author_pic: i.authorDetails.profileImageUrl,
-//         comment: i.snippet.displayMessage,
-//         comment_original: i.snippet.textMessageDetails.messageText,
-//         comment_id: i.id,
-//         like_count: 0,
-//         reply_count: 0,
-//         time: i.snippet.publishedAt,
-//       }
-//       rawData.unshift(obj);
-//     }
-//     this.$emit('update', rawdata);
-//     setTimeout(function () {
-//       vm.keepGet(id);
-//     }, 3000);
-//   })
-// }
-
-
-const finishFetch = () => {
-  if (rawData.length === 0){
-    alert('沒有資料');
-  }else{
-    console.log(rawData);
-    dataStore.setRawData(rawData);
-  }
-  emit('showLoading', false);
+const keepGet = (id) => {
+  getLive(id).then(res => {
+    let arr = [];
+    let counter = res.length - 1;
+    while (res[counter].id !== lastid && counter > 0) {
+      arr.push(res[counter]);
+      counter--;
+    }
+    if (arr.length > 0) {
+      lastid = arr[0].id;
+    }
+    let datas: rawDataType[] = [];
+    for (let i of arr) {
+      let obj: rawDataType = {
+        id: i.id,
+        name: i.authorDetails.displayName,
+        author_url: i.authorDetails.channelUrl,
+        author_pic: i.authorDetails.profileImageUrl,
+        comment: i.snippet.displayMessage,
+        comment_id: i.id,
+        like_count: 0,
+        reply_count: 0,
+        time: dayjs(i.snippet.publishedAt),
+      }
+      datas.push(obj);
+    }
+    if (datas.length > 0) {
+      // rawData = datas.concat(rawData);
+      datas.forEach(item=>{
+        rawData.push(item);
+      });
+    }
+    
+    dataStore.setData([], 'rawData');
+    dataStore.setData(rawData, 'rawData');
+    
+    setTimeout(function () {
+      keepGet(id);
+    }, 3000);
+  })
 }
 
 const getPost = (target: any, target_page: any) => {

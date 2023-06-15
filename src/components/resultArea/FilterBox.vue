@@ -46,9 +46,9 @@ const filterState = reactive({
   searchComment: '',
   removeDuplicate: true,
   hasTag: 0,
-  filterTime: new Date(),
-  endDate: new Date(),
-  endTime: new Date(),
+  filterTime: dataStore.getCommentTime,
+  endDate: dataStore.getCommentTime,
+  endTime: dataStore.getCommentTime,
   reaction: 'ALL',
 });
 
@@ -75,8 +75,9 @@ const filterAll = () => {
   //截止時間、按讚跟分享沒有時間
   rawData = rawData.filter(item=>{
     const d = dayjs(item.time);
-    return d.isBefore(filterState.filterTime);
+    return d.isBefore(dayjs(filterState.filterTime));
   });
+
   //搜尋留言
   rawData = rawData.filter(item=>{
     return item.comment.includes(filterState.searchComment);

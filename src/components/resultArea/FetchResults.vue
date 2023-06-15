@@ -9,9 +9,9 @@
     </div>
     <div class="tabs justify-between">
       <div>
-        <a class="tab tab-lg tab-lifted" @click="setActiveTab(0)" :class="activeTab === 0 ? 'tab-active':''">擷取內容</a> 
-        <a class="tab tab-lg tab-lifted" @click="setActiveTab(1)" :class="activeTab === 1 ? 'tab-active':''">得獎名單</a> 
-        <a class="tab tab-lg tab-lifted" @click="setActiveTab(2)" :class="activeTab === 2 ? 'tab-active':''">得獎名單(表格)</a> 
+        <a class="tab tab-lg tab-lifted mobile:text-base" @click="setActiveTab(0)" :class="activeTab === 0 ? 'tab-active':''">擷取內容</a> 
+        <a class="tab tab-lg tab-lifted mobile:text-base" @click="setActiveTab(1)" :class="activeTab === 1 ? 'tab-active':''">得獎名單</a> 
+        <a class="tab tab-lg tab-lifted mobile:text-base" @click="setActiveTab(2)" :class="activeTab === 2 ? 'tab-active':''">得獎名單(表格)</a> 
       </div>
       <div v-if="activeTab === 0" class="bg-white text-sm py-1 px-4 mobile:w-full">
         <div class="flex items-center">
@@ -58,9 +58,11 @@ const dataStore = useDataStore();
 const activeTab = ref(0);
 const filterBoxRef = ref();
 
-watch(()=>dataStore.rawData, ()=>{
-  activeTab.value = 0;
-  filterBoxRef.value.filterAll();
+dataStore.$subscribe((mutation) => {
+  if (mutation.events.key === 'rawData'){
+    activeTab.value = 0;
+    filterBoxRef.value.filterAll();
+  }
 });
 
 const setActiveTab = (tab: number) => {
