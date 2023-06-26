@@ -38,7 +38,7 @@ function openURL(url: string, target?: string) {
 }
 const YOUTUBE_API_KEY = process.env.VUE_APP_YOUTUBE_API_KEY;
 const YT_url = ref('');
-const DEFAULT_ID = process.env.VUE_APP_NEW_VIDEO;
+const DEFAULT_ID = 'rOHq4AEFkNY';
 const YT_ID = computed(() => {
   return decodeUrl(YT_url.value);
 });
