@@ -4,6 +4,7 @@
     <template v-if="pageStatus === 'home'">
       <MainArea />
       <FetchResults v-if="dataStore.rawData.length > 0" />
+      <GoogleAds v-else />
     </template>
     <template v-if="pageStatus === 'import'">
       <ImportUpload />
@@ -18,6 +19,7 @@ import MainArea from '@/components/mainArea/MainArea.vue';
 import FetchResults from '@/components/resultArea/FetchResults.vue';
 import ImportUpload from '@/components/import/ImportUpload.vue';
 import ImportResult from '@/components/import/ImportResult.vue';
+import GoogleAds from '@/components/GoogleAds.vue';
 import { useDataStore } from '@/store/modules/data';
 const dataStore = useDataStore();
 const pageStatus = ref('home');
