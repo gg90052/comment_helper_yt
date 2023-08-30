@@ -6,23 +6,20 @@
 </template>
 
 <script setup lang="ts">
-
-import InputArea from './InputArea.vue';
-import LoadingModal from '../LoadingModal.vue';
-import { useDataStore } from '@/store/modules/data';
+import InputArea from "./InputArea.vue";
+import LoadingModal from "../LoadingModal.vue";
+import { useDataStore } from "@/store/modules/data";
 const dataStore = useDataStore();
 
 const showLoading = ref(false);
 const inputArea = ref();
 
-
 const loadingDisplay = (show: boolean = true) => {
   showLoading.value = show;
-}
-
+};
 </script>
 <style lang="scss">
-.shadow{
-  box-shadow: 2px 2px 14px 0px rgba(189,189,189,1);
+.shadow {
+  box-shadow: 2px 2px 14px 0px rgba(189, 189, 189, 1);
 }
 </style>
