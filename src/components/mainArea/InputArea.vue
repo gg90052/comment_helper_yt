@@ -118,36 +118,36 @@ const getComments = (video_data) => {
   dataStore.setData(video_data.items[0], "videoDetail");
   const d = new Date();
   if (video_data.items[0].snippet.liveBroadcastContent == "live") {
-    // alert('暫不支援直播影片');
-    // return false;
-    const liveID = video_data.items[0].liveStreamingDetails.activeLiveChatId;
-    dataStore.setData(true, "liveVideo");
-    d.setDate(d.getDate() + 1);
-    dataStore.setData(d, "getCommentTime");
-    getLive(liveID).then((res) => {
-      for (let i of res) {
-        let obj: rawDataType = {
-          id: i.id,
-          name: i.authorDetails.displayName,
-          author_url: i.authorDetails.channelUrl,
-          author_pic: i.authorDetails.profileImageUrl,
-          comment: i.snippet.displayMessage,
-          comment_id: i.id,
-          like_count: 0,
-          reply_count: 0,
-          time: dayjs(i.snippet.publishedAt),
-        };
-        rawData.push(obj);
-      }
-      lastid = res[res.length - 1].id;
-      dataStore.setData(rawData, "rawData");
-      // this.$store.commit('setLoading', false);
-      // this.$emit('finish', yt);
-      setTimeout(function () {
-        keepGet(liveID);
-      }, 3000);
-      emit("showLoading", false);
-    });
+    alert("暫不支援直播影片");
+    return false;
+    // const liveID = video_data.items[0].liveStreamingDetails.activeLiveChatId;
+    // dataStore.setData(true, "liveVideo");
+    // d.setDate(d.getDate() + 1);
+    // dataStore.setData(d, "getCommentTime");
+    // getLive(liveID).then((res) => {
+    //   for (let i of res) {
+    //     let obj: rawDataType = {
+    //       id: i.id,
+    //       name: i.authorDetails.displayName,
+    //       author_url: i.authorDetails.channelUrl,
+    //       author_pic: i.authorDetails.profileImageUrl,
+    //       comment: i.snippet.displayMessage,
+    //       comment_id: i.id,
+    //       like_count: 0,
+    //       reply_count: 0,
+    //       time: dayjs(i.snippet.publishedAt),
+    //     };
+    //     rawData.push(obj);
+    //   }
+    //   lastid = res[res.length - 1].id;
+    //   dataStore.setData(rawData, "rawData");
+    //   // this.$store.commit('setLoading', false);
+    //   // this.$emit('finish', yt);
+    //   setTimeout(function () {
+    //     keepGet(liveID);
+    //   }, 3000);
+    //   emit("showLoading", false);
+    // });
   } else {
     dataStore.setData(d, "getCommentTime");
     getNormal(YT_ID.value).then((res) => {

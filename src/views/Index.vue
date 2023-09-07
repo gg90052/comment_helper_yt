@@ -13,20 +13,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-
-import HeaderComponent from '@/components/Header.vue';
-import MainArea from '@/components/mainArea/MainArea.vue';
-import FetchResults from '@/components/resultArea/FetchResults.vue';
-import ImportUpload from '@/components/import/ImportUpload.vue';
-import ImportResult from '@/components/import/ImportResult.vue';
-import GoogleAds from '@/components/GoogleAds.vue';
-import { useDataStore } from '@/store/modules/data';
+import HeaderComponent from "@/components/Header.vue";
+import MainArea from "@/components/mainArea/MainArea.vue";
+import FetchResults from "@/components/resultArea/FetchResults.vue";
+import ImportUpload from "@/components/import/ImportUpload.vue";
+import ImportResult from "@/components/import/ImportResult.vue";
+import GoogleAds from "@/components/GoogleAds.vue";
+import { useDataStore } from "@/store/modules/data";
 const dataStore = useDataStore();
-const pageStatus = ref('home');
+const pageStatus = ref("home");
 const pageChange = (page) => {
   pageStatus.value = page;
-}
+};
 </script>
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

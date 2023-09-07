@@ -63,7 +63,6 @@
 </template>
 <script lang="ts" setup>
 import dayjs from "dayjs";
-import autoAnimate from "@formkit/auto-animate";
 import { useDataStore } from "@/store/modules/data";
 const dataStore = useDataStore();
 const sortKey = ref("time");

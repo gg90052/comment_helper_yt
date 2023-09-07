@@ -12,23 +12,28 @@
 
     <title>Youtube 留言抽籤小助手 - 抽獎活動最佳夥伴</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2578812574511816"
-  crossorigin="anonymous"></script>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
   </head>
   <body>
-    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2578812574511816"
+     crossorigin="anonymous"></script>
+    <script>
+    window['addAds'] = function () {
+      let chlid = document.getElementsByClassName('adsItem');
+      for (let index = 0; index < chlid.length; index++) {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    }
+    </script>
     <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CRBZCHHN8"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CRBZCHHN8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-    gtag('config', 'G-1CRBZCHHN8');
-  </script>
+      gtag('config', 'G-1CRBZCHHN8');
+    </script>
     <div id="app"></div>
+    <script src="https://apis.google.com/js/platform.js"></script>
   </body>
 </html>
