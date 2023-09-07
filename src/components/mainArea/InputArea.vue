@@ -11,14 +11,26 @@
           class="flex-grow w-full rounded-none input-sm input-bordered border"
           placeholder="請輸入 Youtube 影片網址"
         />
+        <input
+          v-model="api_key"
+          type="text"
+          class="rounded-none input-sm input-bordered border"
+          placeholder="API金鑰（選填）"
+        />
         <button class="btn btn-blue btn-sm flex-shrink-0" @click="getVideoData">
           抓留言
         </button>
       </div>
-      <h1 class="text-red-500 mt-4">
-        因為 Youtube API 有限速問題，所以暫時先把抓直播的功能關起來<br />
-        目前先開另外一組 API key 來使用，再來慢慢想解決方案
-      </h1>
+      <div class="text-red-500 mt-4">
+        <p>一般影片請照舊使用，不需輸入 API 金鑰</p>
+        <p>直播影片需搭配自己的 API 金鑰，請參考以下連結做申請</p>
+        <a
+          class="text-blue-500"
+          target="_blank"
+          href="https://gg90052.github.io/blog/yt_api_key/"
+          >https://gg90052.github.io/blog/yt_api_key/</a
+        >
+      </div>
       <div class="w-full mt-4 p-4 rounded-md border-2">
         <YtVideo :id="YT_ID" class="" />
       </div>
@@ -46,11 +58,10 @@ interface rawDataType {
 
 const dataStore = useDataStore();
 const emit = defineEmits(["fbLogged", "showLoading", "update"]);
-function openURL(url: string, target?: string) {
-  window.open(url, target);
-}
+
 const YOUTUBE_API_KEY = process.env.VUE_APP_YOUTUBE_API_KEY;
 const YT_url = ref("");
+const api_key = ref(localStorage.api_key || "");
 const DEFAULT_ID = process.env.VUE_APP_NEW_VIDEO;
 const YT_ID = computed(() => {
   return decodeUrl(YT_url.value);
@@ -118,36 +129,39 @@ const getComments = (video_data) => {
   dataStore.setData(video_data.items[0], "videoDetail");
   const d = new Date();
   if (video_data.items[0].snippet.liveBroadcastContent == "live") {
-    alert("暫不支援直播影片");
-    return false;
-    // const liveID = video_data.items[0].liveStreamingDetails.activeLiveChatId;
-    // dataStore.setData(true, "liveVideo");
-    // d.setDate(d.getDate() + 1);
-    // dataStore.setData(d, "getCommentTime");
-    // getLive(liveID).then((res) => {
-    //   for (let i of res) {
-    //     let obj: rawDataType = {
-    //       id: i.id,
-    //       name: i.authorDetails.displayName,
-    //       author_url: i.authorDetails.channelUrl,
-    //       author_pic: i.authorDetails.profileImageUrl,
-    //       comment: i.snippet.displayMessage,
-    //       comment_id: i.id,
-    //       like_count: 0,
-    //       reply_count: 0,
-    //       time: dayjs(i.snippet.publishedAt),
-    //     };
-    //     rawData.push(obj);
-    //   }
-    //   lastid = res[res.length - 1].id;
-    //   dataStore.setData(rawData, "rawData");
-    //   // this.$store.commit('setLoading', false);
-    //   // this.$emit('finish', yt);
-    //   setTimeout(function () {
-    //     keepGet(liveID);
-    //   }, 3000);
-    //   emit("showLoading", false);
-    // });
+    if (api_key.value === "") {
+      alert("直播影片請輸入 API 金鑰");
+      emit("showLoading", false);
+      return false;
+    }
+    const liveID = video_data.items[0].liveStreamingDetails.activeLiveChatId;
+    dataStore.setData(true, "liveVideo");
+    d.setDate(d.getDate() + 1);
+    dataStore.setData(d, "getCommentTime");
+    getLive(liveID).then((res) => {
+      for (let i of res) {
+        let obj: rawDataType = {
+          id: i.id,
+          name: i.authorDetails.displayName,
+          author_url: i.authorDetails.channelUrl,
+          author_pic: i.authorDetails.profileImageUrl,
+          comment: i.snippet.displayMessage,
+          comment_id: i.id,
+          like_count: 0,
+          reply_count: 0,
+          time: dayjs(i.snippet.publishedAt),
+        };
+        rawData.push(obj);
+      }
+      lastid = res[res.length - 1].id;
+      dataStore.setData(rawData, "rawData");
+      // this.$store.commit('setLoading', false);
+      // this.$emit('finish', yt);
+      setTimeout(function () {
+        keepGet(liveID);
+      }, 3000);
+      emit("showLoading", false);
+    });
   } else {
     dataStore.setData(d, "getCommentTime");
     getNormal(YT_ID.value).then((res) => {
@@ -221,18 +235,24 @@ const getNormal = (id) => {
 const getLive = (id) => {
   return new Promise((resolve, reject) => {
     let datas = [];
-    let api_url = `https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${id}&maxResults=1000&part=id%2Csnippet%2CauthorDetails&key=${YOUTUBE_API_KEY}`;
+    let api_url = `https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${id}&maxResults=1000&part=id%2Csnippet%2CauthorDetails&key=${api_key.value}`;
 
     fetch(api_url)
       .then((response) => {
         return response.json();
       })
       .then((res) => {
+        if (res.error) {
+          alert(res.error.message);
+          emit("showLoading", false);
+          return false;
+        }
         for (let d of res.items) {
           if (d.snippet) {
             datas.push(d);
           }
         }
+        localStorage.api_key = api_key.value;
         resolve(datas);
       });
   });
