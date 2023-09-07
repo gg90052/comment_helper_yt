@@ -14,15 +14,15 @@
         <input
           v-model="api_key"
           type="text"
-          class="rounded-none input-sm input-bordered border"
+          class="mobile:w-32 rounded-none input-sm input-bordered border"
           placeholder="API金鑰（選填）"
         />
         <button class="btn btn-blue btn-sm flex-shrink-0" @click="getVideoData">
           抓留言
         </button>
       </div>
-      <div class="text-red-500 mt-4">
-        <p>一般影片請照舊使用，不需輸入 API 金鑰</p>
+      <div class="w-full text-red-500 mt-4 whitespace-normal">
+        <p>一般影片、Short請照舊使用，不需輸入 API 金鑰</p>
         <p>直播影片需搭配自己的 API 金鑰，請參考以下連結做申請</p>
         <a
           class="text-blue-500"
@@ -60,7 +60,7 @@ const dataStore = useDataStore();
 const emit = defineEmits(["fbLogged", "showLoading", "update"]);
 
 const YOUTUBE_API_KEY = process.env.VUE_APP_YOUTUBE_API_KEY;
-const YT_url = ref("");
+const YT_url = ref("https://www.youtube.com/shorts/_ZcyU4BL-Is");
 const api_key = ref(localStorage.api_key || "");
 const DEFAULT_ID = process.env.VUE_APP_NEW_VIDEO;
 const YT_ID = computed(() => {
@@ -85,6 +85,10 @@ const decodeUrl = (url) => {
   if (url.indexOf("watch?v=") > 0) {
     let start = url.indexOf("watch?v=") + 8;
     let end = url.indexOf("&", start) > 0 ? url.indexOf("&") : 1000;
+    return url.substring(start, end);
+  } else if (url.indexOf("/shorts/") > 0) {
+    let start = url.indexOf("/shorts/") + 8;
+    let end = url.indexOf("?", start) > 0 ? url.indexOf("?") : 1000;
     return url.substring(start, end);
   } else if (url.indexOf("youtu.be/") > 0) {
     let start = url.indexOf("youtu.be/") + 9;
